@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Login</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 50px; }
+    input, button { padding: 10px; margin: 10px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>Admin Login</h2>
+  <p>Enter password to manage bookings</p>
+  <input type="password" id="pwd" placeholder="Password" />
+  <button onclick="login()">Login</button>
+  <p id="msg"></p>
+
+  <script>
+    function login() {
+      const pwd = document.getElementById('pwd').value;
+      // Simple password (change this)
+      if (pwd === "admin123") {
+        localStorage.setItem('tulip_admin', 'true');
+        window.location.href = 'dashboard.html';
+      } else {
+        document.getElementById('msg').textContent = "Invalid password";
+      }
+    }
+  </script>
+</body>
+</html>
