@@ -1,52 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    select, input, button { padding: 10px; margin: 10px; }
-    .calendar { display: flex; gap: 20px; flex-wrap: wrap; }
-    .day { display: inline-block; width: 28px; height: 28px; line-height: 28px; margin: 2px; border-radius: 50%; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f4f7fc;
+      color: #333;
+      padding: 20px;
+      margin: 0;
+    }
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: #95a5a6;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .back-btn:hover {
+      background: #7f8c8d;
+    }
+    h2 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    .controls {
+      text-align: center;
+      margin: 20px 0;
+    }
+    select, input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+    }
+    .calendar {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .month {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      min-width: 180px;
+    }
+    .month h3 {
+      margin-top: 0;
+      color: #3498db;
+    }
+    .day {
+      display: inline-block;
+      width: 26px;
+      height: 26px;
+      line-height: 26px;
+      margin: 2px;
+      border-radius: 50%;
+      font-size: 0.85em;
+    }
     .available { background: #27ae60; color: white; }
     .booked { background: #e74c3c; color: white; }
     .locked { background: #95a5a6; color: white; }
   </style>
 </head>
 <body>
-  <h2>Admin Dashboard</h2>
-  <p>Manage booking status for units</p>
 
-  <label>Unit: </label>
-  <select id="unitSelect">
-    <option value="TULIP1">TULIP 1</option>
-    <option value="TULIP2">TULIP 2</option>
-    <!-- Add all -->
-  </select>
+  <!-- Back to booking link -->
+  <a href="../index.html" class="back-btn">← Back to Booking</a>
 
-  <input type="date" id="dateInput" />
-  <select id="statusInput">
-    <option value="available">Mark as Available</option>
-    <option value="booked">Mark as Booked</option>
-    <option value="locked">Lock Date</option>
-  </select>
-  <button onclick="updateStatus()">Update</button>
-  <hr>
+  <h2>📋 Admin Dashboard</h2>
+  <p style="text-align:center;">Manage availability for units</p>
+
+  <div class="controls">
+    <label>Unit: </label>
+    <select id="unitSelect" onchange="generateCalendar()"></select>
+
+    <div>
+      <input type="date" id="dateInput" />
+      <select id="statusInput">
+        <option value="available">Mark as Available</option>
+        <option value="booked">Mark as Booked</option>
+        <option value="locked">Lock Date</option>
+      </select>
+      <button onclick="updateStatus()">Update</button>
+    </div>
+  </div>
 
   <div class="calendar" id="adminCalendar"></div>
 
   <script>
-    const GIST_URL = 'https://gist.githubusercontent.com/YOURNAME/abc123abc123/raw/tulip-bookings.json';
-    let allData = [];
-
-    // Auth check
+    // 🔐 Auth check
     if (!localStorage.getItem('tulip_admin')) {
       window.location.href = 'login.html';
     }
 
+    const GIST_URL = 'https://gist.githubusercontent.com/rota2903/YOUR-GIST-ID/raw/tulip-bookings.json';
+    let allData = [];
+
+    // Load all units
     async function loadAll() {
-      const res = await fetch(GIST_URL + '?t=' + Date.now());
-      allData = await res.json();
-      generateCalendar();
+      try {
+        const res = await fetch(GIST_URL + '?t=' + Date.now());
+        allData = await res.json();
+        populateUnitSelect();
+        generateCalendar();
+      } catch (e) {
+        alert("Failed to load data. Check Gist URL.");
+        console.error(e);
+      }
+    }
+
+    function populateUnitSelect() {
+      const select = document.getElementById('unitSelect');
+      select.innerHTML = '';
+      for (let i = 1; i <= 9; i++) {
+        const opt = document.createElement('option');
+        opt.value = `TULIP${i}`;
+        opt.textContent = `TULIP ${i}`;
+        select.appendChild(opt);
+      }
     }
 
     function generateCalendar() {
@@ -59,30 +138,26 @@
       for (let m = 0; m < 5; m++) {
         const month = new Date(today.getFullYear(), today.getMonth() + m, 1);
         const monthDiv = document.createElement('div');
-        monthDiv.innerHTML = `<h4>${month.toLocaleString('default', { month: 'short' })}</h4>`;
-        
+        monthDiv.innerHTML = `<h3>${month.toLocaleString('default', { month: 'short' })}</h3>`;
+
         const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
         for (let d = 1; d <= days; d++) {
           const dateStr = `${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-          const daySpan = document.createElement('span');
-          daySpan.textContent = d;
+          const span = document.createElement('span');
+          span.textContent = d;
 
-          if (data.locked.includes(dateStr)) daySpan.className = 'day locked';
-          else if (data.bookings.some(b => b.date === dateStr)) daySpan.className = 'day booked';
-          else daySpan.className = 'day available';
+          if (data.locked.includes(dateStr)) span.className = 'day locked';
+          else if (data.bookings.some(b => b.date === dateStr)) span.className = 'day booked';
+          else span.className = 'day available';
 
-          monthDiv.appendChild(daySpan);
+          monthDiv.appendChild(span);
         }
         cal.appendChild(monthDiv);
       }
     }
 
-    document.getElementById('unitSelect').onchange = generateCalendar;
-
     function updateStatus() {
-      // This is where you'd ideally PATCH the Gist
-      alert("🔐 To update: You must manually edit the Gist JSON and re-upload.\n\nIn future, use GitHub API + token to automate.");
-      // Tip: You can build a script to update Gist via GitHub API (free, but needs personal token)
+      alert("📌 To update:\n1. Edit your Gist JSON manually\n2. Or set up GitHub API later for auto-update.\n\nThis is a read-only preview for now.");
     }
 
     loadAll();
