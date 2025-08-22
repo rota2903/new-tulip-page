@@ -6,8 +6,8 @@
   <title>Admin Dashboard</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background: #f4f7fc;
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
       color: #333;
       padding: 20px;
       margin: 0;
@@ -23,12 +23,10 @@
       text-decoration: none;
       font-size: 14px;
     }
-    .back-btn:hover {
-      background: #7f8c8d;
-    }
     h2 {
       color: #2c3e50;
       text-align: center;
+      margin-bottom: 10px;
     }
     .controls {
       text-align: center;
@@ -37,7 +35,6 @@
     select, input, button {
       padding: 10px;
       margin: 5px;
-      font-size: 16px;
     }
     .calendar {
       display: flex;
@@ -49,14 +46,12 @@
       background: white;
       border-radius: 10px;
       padding: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       min-width: 180px;
-      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     .month h3 {
-      margin-top: 0;
+      margin: 0 0 10px;
       color: #3498db;
-      font-size: 1.3em;
     }
     .day {
       display: inline-block;
@@ -65,33 +60,30 @@
       line-height: 26px;
       margin: 2px;
       border-radius: 50%;
-      font-size: 0.85em;
+      font-size: 0.8em;
     }
     .available { background: #27ae60; color: white; }
     .booked { background: #e74c3c; color: white; }
     .locked { background: #95a5a6; color: white; }
-    .off { color: #ddd; }
   </style>
 </head>
 <body>
 
-  <!-- Back to booking link -->
+  <!-- ✅ Back Button -->
   <a href="../index.html" class="back-btn">← Back to Booking</a>
 
-  <h2>📋 Admin Dashboard</h2>
-  <p style="text-align:center;">Manage availability for TULIP units</p>
+  <h2>Admin Dashboard</h2>
+  <p style="text-align:center">Manage unit availability</p>
 
   <div class="controls">
     <label>Unit: </label>
-    <select id="unitSelect" onchange="generateCalendar()">
-      <!-- Filled by JavaScript -->
-    </select>
+    <select id="unitSelect" onchange="generateCalendar()"></select>
 
     <div style="margin-top: 15px;">
       <input type="date" id="dateInput" />
       <select id="statusInput">
-        <option value="available">Mark as Available</option>
-        <option value="booked">Mark as Booked</option>
+        <option value="available">Available</option>
+        <option value="booked">Booked</option>
         <option value="locked">Lock Date</option>
       </select>
       <button onclick="updateStatus()">Update</button>
@@ -105,28 +97,88 @@
   <script>
     // 🔐 Auth check
     if (!localStorage.getItem('tulip_admin')) {
-      alert("Access denied. Please log in.");
       window.location.href = 'login.html';
     }
 
-    // 🌐 Your Gist Raw URL (do not change unless updating Gist)
+    // 🌐 Gist URL
     const GIST_URL = 'https://gist.githubusercontent.com/rota2903/582bfb70d0bc3367e09a2562e5b17215/raw/tulip-bookings.json';
 
-    // Global data storage
     let allData = [];
 
-    // Load all units from Gist
+    // Load data
     async function loadAll() {
       try {
-        const res = await fetch(GIST_URL + '?t=' + new Date().getTime());
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        const res = await fetch(GIST_URL + '?t=' + Date.now());
+        allData = await res.json();
+        populateUnitSelect();
+        generateCalendar(); // Show first unit
+      } catch (e) {
+        alert("Failed to load data. Check Gist URL.");
+        console.error(e);
+      }
+    }
 
-        if (!Array.isArray(data)) {
-          throw new Error("Data is not an array. Check Gist JSON format.");
+    // Populate unit dropdown
+    function populateUnitSelect() {
+      const select = document.getElementById('unitSelect');
+      select.innerHTML = '';
+      for (let i = 1; i <= 9; i++) {
+        const opt = document.createElement('option');
+        opt.value = `TULIP${i}`;
+        opt.textContent = `TULIP ${i}`;
+        select.appendChild(opt);
+      }
+    }
+
+    // Generate calendar
+    function generateCalendar() {
+      const unit = document.getElementById('unitSelect').value;
+      const unitData = allData.find(u => u.unit === unit) || { bookings: [], locked: [] };
+      const container = document.getElementById('adminCalendar');
+      container.innerHTML = '';
+
+      const today = new Date();
+      for (let i = 0; i < 5; i++) {
+        const month = new Date(today.getFullYear(), today.getMonth() + i, 1);
+        const monthName = month.toLocaleDateString('en-US', { month: 'short' });
+        const daysInMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
+        const firstDay = month.getDay();
+
+        const monthDiv = document.createElement('div');
+        monthDiv.className = 'month';
+        monthDiv.innerHTML = `<h3>${monthName}</h3>`;
+
+        for (let j = 0; j < firstDay; j++) {
+          const span = document.createElement('span');
+          span.className = 'day off';
+          monthDiv.appendChild(span);
         }
 
-        allData = data;
-        console.log("✅ SUCCESS: Loaded data:", allData);
-        populateUnitSelect();
-       
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dateStr = `${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+          const span = document.createElement('span');
+          span.textContent = day;
+
+          if (unitData.locked.includes(dateStr)) {
+            span.className = 'day locked';
+          } else if (unitData.bookings.some(b => b.date === dateStr)) {
+            span.className = 'day booked';
+          } else {
+            span.className = 'day available';
+          }
+
+          monthDiv.appendChild(span);
+        }
+        container.appendChild(monthDiv);
+      }
+    }
+
+    function updateStatus() {
+      alert("📌 For now: Edit your Gist manually to update dates.\nFuture: Auto-save via GitHub API.");
+    }
+
+    // Load on start
+    loadAll();
+  </script>
+</body>
+</html>
