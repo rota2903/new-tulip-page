@@ -5,115 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TULIP HOLIDAY CAMERON HIGHLANDS</title>
   <style>
-    /* Background image from Unsplash (Cameron Highlands style - tea plantation/mountains) */
     body {
-      font-family: 'Poppins', sans-serif;
-      background-image: url('https://images.unsplash.com/photo-1526815256275-61751c701870?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      color: #fff;
-      text-align: center;
       margin: 0;
-      padding: 50px 20px;
-      min-height: 100vh;
+      font-family: 'Arial', sans-serif;
+      /* Add a real background image */
+      background: url('https://images.unsplash.com/photo-1615529162924-f8605388461d?q=80&w=1600') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 60px;
+      /* Add dark overlay for readability */
       position: relative;
     }
-
-    /* Semi-transparent overlay to make text readable */
     body::before {
       content: '';
       position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5); /* Dark overlay for clarity */
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5); /* Dark overlay */
       z-index: -1;
     }
-
+    .logo {
+      width: 220px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+    }
     h1 {
       font-size: 2.5em;
-      margin-bottom: 10px;
-      text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.6);
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+      margin-bottom: 20px;
     }
-
-    p {
+    .subtitle {
       font-size: 1.2em;
-      margin-bottom: 30px;
-      opacity: 0.9;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+      margin-bottom: 40px;
     }
-
-    .tulip-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-width: 400px;
-      margin: 30px auto;
+    .units {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 85%;
+      margin: 20px auto;
     }
-
-    .tulip-item {
-      padding: 15px;
-      font-size: 1.2em;
-      font-weight: 600;
-      color: #fff;
-      background: rgba(139, 89, 44, 0.8);
-      border: 2px solid #fff;
+    .unit-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: white;
+      padding: 22px;
+      font-size: 1.3em;
       border-radius: 12px;
-      cursor: pointer;
+      text-decoration: none;
+      display: block;
       transition: all 0.3s ease;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
     }
-
-    .tulip-item:hover {
-      background: #8b5a2b;
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    .unit-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
-
-    .login {
-      margin-top: 30px;
-    }
-
-    .login a {
-      color: #fff;
-      text-decoration: underline;
-      font-size: 1em;
-      opacity: 0.8;
-    }
-
-    .login a:hover {
-      opacity: 1;
+    .admin {
+      margin-top: 40px;
+      font-size: 0.95em;
+      color: #ccc;
       text-decoration: none;
     }
+    .admin:hover {
+      color: white;
+      text-decoration: underline;
+    }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Optional: Add logo if you have one later -->
+  <!-- <img src="assets/images/logo.png" alt="TULIP Logo" class="logo" /> -->
+  
+  <h1>🌺 TULIP HOLIDAY CAMERON HIGHLANDS</h1>
+  <p class="subtitle">Luxury Stays • Mountain View • Peaceful Retreat</p>
 
-  <!-- Logo -->
-  <div style="text-align: center; margin: 20px 0;">
-    <img src="IMG_20250815_212003_329.png" alt="TULIP Holiday Logo" style="max-width: 280px; height: auto; border-radius: 10px;">
+  <div class="units">
+    <a href="tulip1/" class="unit-btn">TULIP 1</a>
+    <a href="tulip2/" class="unit-btn">TULIP 2</a>
+    <a href="tulip3/" class="unit-btn">TULIP 3</a>
+    <a href="tulip4/" class="unit-btn">TULIP 4</a>
+    <a href="tulip5/" class="unit-btn">TULIP 5</a>
+    <a href="tulip6/" class="unit-btn">TULIP 6</a>
+    <a href="tulip7/" class="unit-btn">TULIP 7</a>
+    <a href="tulip8/" class="unit-btn">TULIP 8</a>
+    <a href="tulip9/" class="unit-btn">TULIP 9</a>
   </div>
 
-  <h1>TULIP HOLIDAY CAMERON HIGHLANDS</h1>
-  <p>Luxury Stays • Mountain View • Peaceful Retreat</p>
-
-  <div class="tulip-list">
-    <button class="tulip-item" onclick="location.href='tulip1.html'">TULIP 1</button>
-    <button class="tulip-item" onclick="location.href='tulip2.html'">TULIP 2</button>
-    <button class="tulip-item" onclick="location.href='tulip3.html'">TULIP 3</button>
-    <button class="tulip-item" onclick="location.href='tulip4.html'">TULIP 4</button>
-    <button class="tulip-item" onclick="location.href='tulip5.html'">TULIP 5</button>
-    <button class="tulip-item" onclick="location.href='tulip6.html'">TULIP 6</button>
-    <button class="tulip-item" onclick="location.href='tulip7.html'">TULIP 7</button>
-    <button class="tulip-item" onclick="location.href='tulip8.html'">TULIP 8</button>
-    <button class="tulip-item" onclick="location.href='tulip9.html'">TULIP 9</button>
-  </div>
-
-  <div class="login">
-    <a href="login.html">Admin Login</a>
-  </div>
-
+  <a href="admin/login.html" class="admin">Admin Login</a>
 </body>
 </html>
