@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Dashboard</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    select, input, button { padding: 10px; margin: 10px; }
+    .calendar { display: flex; gap: 20px; flex-wrap: wrap; }
+    .day { display: inline-block; width: 28px; height: 28px; line-height: 28px; margin: 2px; border-radius: 50%; }
+    .available { background: #27ae60; color: white; }
+    .booked { background: #e74c3c; color: white; }
+    .locked { background: #95a5a6; color: white; }
+  </style>
+</head>
+<body>
+  <h2>Admin Dashboard</h2>
+  <p>Manage booking status for units</p>
+
+  <label>Unit: </label>
+  <select id="unitSelect">
+    <option value="TULIP1">TULIP 1</option>
+    <option value="TULIP2">TULIP 2</option>
+    <!-- Add all -->
+  </select>
+
+  <input type="date" id="dateInput" />
+  <select id="statusInput">
+    <option value="available">Mark as Available</option>
+    <option value="booked">Mark as Booked</option>
+    <option value="locked">Lock Date</option>
+  </select>
+  <button onclick="updateStatus()">Update</button>
+  <hr>
+
+  <div class="calendar" id="adminCalendar"></div>
+
+  <script>
+    const GIST_URL = 'https://gist.githubusercontent.com/YOURNAME/abc123abc123/raw/tulip-bookings.json';
+    let allData = [];
+
+    // Auth check
+    if (!localStorage.getItem('tulip_admin')) {
+      window.location.href = 'login.html';
+    }
+
+    async function loadAll() {
+      const res = await fetch(GIST_URL + '?t=' + Date.now());
+      allData = await res.json();
+      generateCalendar();
+    }
+
+    function generateCalendar() {
+      const unit = document.getElementById('unitSelect').value;
+      const data = allData.find(d => d.unit === unit) || { bookings: [], locked: [] };
+      const today = new Date();
+      const cal = document.getElementById('adminCalendar');
+      cal.innerHTML = '';
+
+      for (let m = 0; m < 5; m++) {
+        const month = new Date(today.getFullYear(), today.getMonth() + m, 1);
+        const monthDiv = document.createElement('div');
+        monthDiv.innerHTML = `<h4>${month.toLocaleString('default', { month: 'short' })}</h4>`;
+        
+        const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
+        for (let d = 1; d <= days; d++) {
+          const dateStr = `${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+          const daySpan = document.createElement('span');
+          daySpan.textContent = d;
+
+          if (data.locked.includes(dateStr)) daySpan.className = 'day locked';
+          else if (data.bookings.some(b => b.date === dateStr)) daySpan.className = 'day booked';
+          else daySpan.className = 'day available';
+
+          monthDiv.appendChild(daySpan);
+        }
+        cal.appendChild(monthDiv);
+      }
+    }
+
+    document.getElementById('unitSelect').onchange = generateCalendar;
+
+    function updateStatus() {
+      // This is where you'd ideally PATCH the Gist
+      alert("🔐 To update: You must manually edit the Gist JSON and re-upload.\n\nIn future, use GitHub API + token to automate.");
+      // Tip: You can build a script to update Gist via GitHub API (free, but needs personal token)
+    }
+
+    loadAll();
+  </script>
+</body>
+</html>
