@@ -36,7 +36,7 @@
     }
     select, input, button {
       padding: 10px;
-      margin: 10px;
+      margin: 5px;
       font-size: 16px;
     }
     .calendar {
@@ -51,10 +51,12 @@
       padding: 15px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       min-width: 180px;
+      text-align: center;
     }
     .month h3 {
       margin-top: 0;
       color: #3498db;
+      font-size: 1.3em;
     }
     .day {
       display: inline-block;
@@ -68,6 +70,7 @@
     .available { background: #27ae60; color: white; }
     .booked { background: #e74c3c; color: white; }
     .locked { background: #95a5a6; color: white; }
+    .off { color: #ddd; }
   </style>
 </head>
 <body>
@@ -76,13 +79,15 @@
   <a href="../index.html" class="back-btn">← Back to Booking</a>
 
   <h2>📋 Admin Dashboard</h2>
-  <p style="text-align:center;">Manage availability for units</p>
+  <p style="text-align:center;">Manage availability for TULIP units</p>
 
   <div class="controls">
     <label>Unit: </label>
-    <select id="unitSelect" onchange="generateCalendar()"></select>
+    <select id="unitSelect" onchange="generateCalendar()">
+      <!-- Filled by JavaScript -->
+    </select>
 
-    <div>
+    <div style="margin-top: 15px;">
       <input type="date" id="dateInput" />
       <select id="statusInput">
         <option value="available">Mark as Available</option>
@@ -93,74 +98,35 @@
     </div>
   </div>
 
-  <div class="calendar" id="adminCalendar"></div>
+  <div class="calendar" id="adminCalendar">
+    <p>Loading calendar...</p>
+  </div>
 
   <script>
     // 🔐 Auth check
     if (!localStorage.getItem('tulip_admin')) {
+      alert("Access denied. Please log in.");
       window.location.href = 'login.html';
     }
 
-    const GIST_URL = '<script src="https://gist.githubusercontent.com/rota2903/582bfb70d0bc3367e09a2562e5b17215/raw/817bca5f3c3bb8293895b9ea90eedfdb579893e6/tulip-bookings.json";
+    // 🌐 Your Gist Raw URL (do not change unless updating Gist)
+    const GIST_URL = 'https://gist.githubusercontent.com/rota2903/582bfb70d0bc3367e09a2562e5b17215/raw/tulip-bookings.json';
+
+    // Global data storage
     let allData = [];
 
-    // Load all units
+    // Load all units from Gist
     async function loadAll() {
       try {
-        const res = await fetch(GIST_URL + '?t=' + Date.now());
-        allData = await res.json();
-        populateUnitSelect();
-        generateCalendar();
-      } catch (e) {
-        alert("Failed to load data. Check Gist URL.");
-        console.error(e);
-      }
-    }
+        const res = await fetch(GIST_URL + '?t=' + new Date().getTime());
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
 
-    function populateUnitSelect() {
-      const select = document.getElementById('unitSelect');
-      select.innerHTML = '';
-      for (let i = 1; i <= 9; i++) {
-        const opt = document.createElement('option');
-        opt.value = `TULIP${i}`;
-        opt.textContent = `TULIP ${i}`;
-        select.appendChild(opt);
-      }
-    }
-
-    function generateCalendar() {
-      const unit = document.getElementById('unitSelect').value;
-      const data = allData.find(d => d.unit === unit) || { bookings: [], locked: [] };
-      const today = new Date();
-      const cal = document.getElementById('adminCalendar');
-      cal.innerHTML = '';
-
-      for (let m = 0; m < 5; m++) {
-        const month = new Date(today.getFullYear(), today.getMonth() + m, 1);
-        const monthDiv = document.createElement('div');
-        monthDiv.innerHTML = `<h3>${month.toLocaleString('default', { month: 'short' })}</h3>`;
-
-        const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
-        for (let d = 1; d <= days; d++) {
-          const dateStr = `${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-          const span = document.createElement('span');
-          span.textContent = d;
-
-          if (data.locked.includes(dateStr)) span.className = 'day locked';
-          else if (data.bookings.some(b => b.date === dateStr)) span.className = 'day booked';
-          else span.className = 'day available';
-
-          monthDiv.appendChild(span);
+        if (!Array.isArray(data)) {
+          throw new Error("Data is not an array. Check Gist JSON format.");
         }
-        cal.appendChild(monthDiv);
-      }
-    }
 
-    function updateStatus() {
-      alert("📌 To update:\n1. Edit your Gist JSON manually\n2. Or set up GitHub API later for auto-update.\n\nThis is a read-only preview for now.");
-    }
-
-    loadAll();
-  </script>
-</body>
-</html>
+        allData = data;
+        console.log("✅ SUCCESS: Loaded data:", allData);
+        populateUnitSelect();
+       
