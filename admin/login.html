@@ -1,28 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Login</title>
   <style>
-    body { font-family: Arial; text-align: center; padding: 50px; }
-    input, button { padding: 10px; margin: 10px; font-size: 16px; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f0f5ff;
+      color: #333;
+      text-align: center;
+      padding: 50px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    input {
+      padding: 12px;
+      width: 80%;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 12px 24px;
+      background: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1f6aa5;
+    }
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #95a5a6;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .back-btn:hover {
+      background: #7f8c8d;
+    }
+    #msg {
+      color: #e74c3c;
+      margin-top: 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <h2>Admin Login</h2>
-  <p>Enter password to manage bookings</p>
-  <input type="password" id="pwd" placeholder="Password" />
-  <button onclick="login()">Login</button>
-  <p id="msg"></p>
+  <div class="container">
+    <h2>🔐 Admin Login</h2>
+    <p>Enter password to manage bookings</p>
+
+    <input type="password" id="pwd" placeholder="Password" />
+    <br />
+    <button onclick="login()">Login</button>
+
+    <p id="msg"></p>
+
+    <!-- Back to main site -->
+    <a href="../index.html" class="back-btn">← Back to Booking Page</a>
+  </div>
 
   <script>
     function login() {
       const pwd = document.getElementById('pwd').value;
-      // Simple password (change this)
+      // Change this password!
       if (pwd === "admin123") {
         localStorage.setItem('tulip_admin', 'true');
         window.location.href = 'dashboard.html';
       } else {
-        document.getElementById('msg').textContent = "Invalid password";
+        document.getElementById('msg').textContent = "❌ Invalid password";
       }
     }
   </script>
