@@ -5,26 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TULIP HOLIDAY CAMERON HIGHLANDS</title>
   <style>
+    /* Background image from Unsplash (Cameron Highlands style - tea plantation/mountains) */
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #8b5a2b, #d2b48c, #f5f5dc);
+      background-image: url('https://images.unsplash.com/photo-1526815256275-61751c701870?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
       color: #fff;
       text-align: center;
       margin: 0;
       padding: 50px 20px;
       min-height: 100vh;
-      background-attachment: fixed;
+      position: relative;
     }
+
+    /* Semi-transparent overlay to make text readable */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); /* Dark overlay for clarity */
+      z-index: -1;
+    }
+
     h1 {
       font-size: 2.5em;
       margin-bottom: 10px;
-      text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+      text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.6);
     }
+
     p {
       font-size: 1.2em;
       margin-bottom: 30px;
       opacity: 0.9;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
+
     .tulip-list {
       display: flex;
       flex-direction: column;
@@ -32,6 +52,7 @@
       max-width: 400px;
       margin: 30px auto;
     }
+
     .tulip-item {
       padding: 15px;
       font-size: 1.2em;
@@ -43,20 +64,24 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
+
     .tulip-item:hover {
       background: #8b5a2b;
       transform: translateY(-3px);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
+
     .login {
       margin-top: 30px;
     }
+
     .login a {
       color: #fff;
       text-decoration: underline;
       font-size: 1em;
       opacity: 0.8;
     }
+
     .login a:hover {
       opacity: 1;
       text-decoration: none;
@@ -66,7 +91,7 @@
 </head>
 <body>
 
-  <!-- Logo added at the top -->
+  <!-- Logo -->
   <div style="text-align: center; margin: 20px 0;">
     <img src="IMG_20250815_212003_329.png" alt="TULIP Holiday Logo" style="max-width: 280px; height: auto; border-radius: 10px;">
   </div>
