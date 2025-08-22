@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TULIP Booking</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: url('assets/images/background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 50px;
+    }
+    .logo {
+      width: 200px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+    .units {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 80%;
+      margin: 40px auto;
+    }
+    .unit-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
+      color: white;
+      padding: 20px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      display: block;
+    }
+    .unit-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(1.05);
+    }
+    .admin {
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #ccc;
+      text-decoration: underline;
+    }
+    .admin:hover {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <img src="assets/images/logo.png" alt="TULIP Logo" class="logo" />
+  <h1>Welcome to TULIP Villas</h1>
+
+  <div class="units">
+    <a href="tulip1/index.html" class="unit-btn">TULIP 1</a>
+    <a href="tulip2/index.html" class="unit-btn">TULIP 2</a>
+    <a href="tulip3/index.html" class="unit-btn">TULIP 3</a>
+    <a href="tulip4/index.html" class="unit-btn">TULIP 4</a>
+    <a href="tulip5/index.html" class="unit-btn">TULIP 5</a>
+    <a href="tulip6/index.html" class="unit-btn">TULIP 6</a>
+    <a href="tulip7/index.html" class="unit-btn">TULIP 7</a>
+    <a href="tulip8/index.html" class="unit-btn">TULIP 8</a>
+    <a href="tulip9/index.html" class="unit-btn">TULIP 9</a>
+  </div>
+
+  <a href="admin/login.html" class="admin">Admin Login</a>
+</body>
+</html>
