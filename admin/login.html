@@ -6,87 +6,69 @@
   <title>Admin Login</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background: #f0f5ff;
-      color: #333;
-      text-align: center;
-      padding: 50px;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
     .container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 30px;
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
     }
-    h2 {
-      color: #2c3e50;
-    }
+    h1 { margin-bottom: 20px; color: #333; }
     input {
-      padding: 12px;
-      width: 80%;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      width: 100%;
+      padding: 10px;
       margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
     }
     button {
-      padding: 12px 24px;
-      background: #2980b9;
+      background-color: #007bff;
       color: white;
+      padding: 10px 20px;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
     }
-    button:hover {
-      background: #1f6aa5;
-    }
-    .back-btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #95a5a6;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-    .back-btn:hover {
-      background: #7f8c8d;
-    }
-    #msg {
-      color: #e74c3c;
-      margin-top: 10px;
-      font-size: 14px;
-    }
+    button:hover { background-color: #0056b3; }
+    .error { color: red; margin-top: 10px; display: none; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>🔐 Admin Login</h2>
+    <h1>Admin Login</h1>
     <p>Enter password to manage bookings</p>
-
-    <input type="password" id="pwd" placeholder="Password" />
-    <br />
-    <button onclick="login()">Login</button>
-
-    <p id="msg"></p>
-
-    <!-- Back to main site -->
-    <a href="../index.html" class="back-btn">← Back to Booking Page</a>
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="checkPassword()">Login</button>
+    <p id="error" class="error">❌ Wrong password!</p>
+    <p><a href="/" style="color: #007bff; text-decoration: none;">← Back to Booking Page</a></p>
   </div>
 
   <script>
-    function login() {
-      const pwd = document.getElementById('pwd').value;
-      // Change this password!
-      if (pwd === "admin123") {
-        localStorage.setItem('tulip_admin', 'true');
-        window.location.href = 'dashboard.html';
+    // Set your password here
+    const correctPassword = "tulip2025";  // ← Change this to your password
+
+    function checkPassword() {
+      const input = document.getElementById("password").value;
+      const error = document.getElementById("error");
+
+      if (input === correctPassword) {
+        // If correct, go to dashboard
+        window.location.href = "dashboard.html";  // Make sure this file exists
       } else {
-        document.getElementById('msg').textContent = "❌ Invalid password";
+        // Show error
+        error.style.display = "block";
       }
     }
   </script>
