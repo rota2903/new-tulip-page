@@ -78,19 +78,19 @@
   <p style="text-align:center">Click below to lock dates for any unit</p>
 
   <div class="unit-grid" id="unitGrid">
-    <!-- Will be filled by JavaScript -->
+    <!-- Buttons will be added here by JavaScript -->
   </div>
 
   <script>
-    // 🔐 Auth check
+    // 🔐 Auth check – if not logged in, redirect to login
     if (!localStorage.getItem('tulip_admin')) {
       window.location.href = 'login.html';
     }
 
-    // 📝 Replace with your Tally form link
-    const TALLY_FORM_LINK = 'https://tally.so/r/w8BBBk'; // ← CHANGE THIS!
+    // ✅ Your Tally Form Link (cleaned up – no space at the end)
+    const TALLY_FORM_LINK = 'https://tally.so/r/w8BBBk';
 
-    // Create unit buttons
+    // Create 9 unit cards
     const unitGrid = document.getElementById('unitGrid');
 
     for (let i = 1; i <= 9; i++) {
@@ -99,16 +99,18 @@
       const card = document.createElement('div');
       card.className = 'unit-card';
 
+      // Create the URL with pre-filled unit
+      const url = new URL(TALLY_FORM_LINK);
+      url.searchParams.append('unit', unit);
+
       card.innerHTML = `
         <h3>${unit}</h3>
-        <a href="${TALLY_FORM_LINK}?unit=${encodeURIComponent(unit)}" 
-           target="_blank" 
-           class="lock-btn">
+        <a href="${url}" target="_blank" class="lock-btn">
           🔒 Lock Dates
         </a>
         <div class="info">
-          Opens booking form<br>
-          Admin picks dates
+          Opens Tally form<br>
+          Admin selects check-in/out and status
         </div>
       `;
 
