@@ -1,371 +1,365 @@
-<script>
-  // === CONFIGURATION ===
-  const UNIT_ID = 'unit1';
-  const ADMIN_PASSWORD = '9TulipsCH';
-  const JSON_URL = 'unit1.json';  // Loads from same folder
-  const REPO_PATH = 'rota2903/new-tulip-page';
-  const FILE_PATH = 'tulip1/unit1.json';  // Path from repo root
-  const GITHUB_TOKEN = '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'; // ← Paste NEW token here after generating
-
-  // === STATE ===
-  let adminSelectedDates = [];
-  let isAdminMode = false;
-  let sharedData = { bookings: [], locked: [] };
-
-  // === DOM Elements ===
-  const calendar = document.getElementById('calendar');
-  const adminCalendar = document.getElementById('adminCalendar');
-  const adminPanel = document.getElementById('adminPanel');
-  const adminContent = document.getElementById('adminContent');
-  const adminPass = document.getElementById('adminPass');
-
-  // === 1. Load Data from GitHub ===
-  async function loadData() {
-    try {
-      const res = await fetch(JSON_URL + '?t=' + new Date().getTime()); // Cache buster
-      sharedData = await res.json();
-      generateCalendar();
-    } catch (err) {
-      console.error("Failed to load booking data", err);
-      calendar.innerHTML = `<p style="color:red;">⚠️ Could not load calendar. Check your internet or try again later.</p>`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TULIP 1: B8-3-5</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 20px;
+      background: #f8f9fa;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
     }
-  }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    .back-btn {
+      display: inline-block;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover {
+      background: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 30px 0;
+    }
+    th {
+      background: #007bff;
+      color: white;
+      padding: 8px;
+    }
+    td {
+      text-align: center;
+      padding: 8px;
+      height: 40px;
+      border: 1px solid #ddd;
+    }
+    .past { background: #ccc; color: #777; }
+    .open { background: #2ecc71; color: white; }
+    .pending { background: #f39c12; color: white; }
+    .approved { background: #3498db; color: white; }
+    .locked { background: #95a5a6; color: white; }
+    .selected { 
+      background: #e67e22 !important; 
+      color: white; 
+      position: relative;
+      transform: scale(1.1);
+      z-index: 5;
+    }
+    .approved:hover, .locked:hover, .selected:hover { 
+      transform: scale(1.1); 
+    }
+    input, button {
+      padding: 12px;
+      margin: 10px 0;
+      width: 100%;
+      font-size: 16px;
+    }
+    button {
+      background: #27ae60;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #219653;
+    }
+    .btn-delete {
+      background: #e74c3c !important;
+    }
+    .btn-delete:hover {
+      background: #c0392b !important;
+    }
+    .btn-logout {
+      background: #95a5a6 !important;
+    }
+    .btn-logout:hover {
+      background: #7f8c8d !important;
+    }
+    #status {
+      margin: 15px 0;
+      padding: 10px;
+      background: #d5f5e3;
+      border-radius: 5px;
+    }
+    .legend {
+      margin: 15px 0;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      font-size: 14px;
+    }
+    .legend div {
+      display: flex;
+      align-items: center;
+    }
+    .legend span {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+      display: inline-block;
+      border-radius: 3px;
+    }
+    .booking-info {
+      font-size: 12px;
+      margin-top: 2px;
+    }
+    .my-booking {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px 0;
+    }
+    .prices {
+      background: #e8f4f8;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    .prices h4 {
+      margin: 10px 0 5px 0;
+      color: #2c3e50;
+    }
+    .whatsapp-btn {
+      display: block;
+      background: #25D366;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .whatsapp-btn:hover {
+      background: #128C7E;
+    }
+  </style>
+</head>
+<body>
+  <!-- Back to Main Page -->
+  <a href="https://rota2903.github.io/new-tulip-page" class="back-btn">← Back to Units</a>
 
-  // === 2. Save Data to GitHub ===
-  async function saveData(message) {
-    if (!GITHUB_TOKEN) {
-      alert("❌ GitHub token not set. Cannot save.");
-      return false;
+  <h1>🏡 TULIP 1: B8-3-5</h1>
+
+  <!-- WhatsApp Booking Button -->
+  <a href="https://wa.me/60123456789?text=Hi, I'd like to book TULIP 1" class="whatsapp-btn">📱 Book via WhatsApp</a>
+
+  <!-- Price Information -->
+  <div class="prices">
+    <h4>💰 Pricing (Per Night)</h4>
+    <ul>
+      <li>Daily: RM200</li>
+      <li>Weekend (Fri-Sun): RM250</li>
+      <li>Peak Weekend (Fri-Sun): RM300</li>
+    </ul>
+    <p><strong>Discount Price:</strong> Contact admin for special rates.</p>
+  </div>
+
+  <div class="legend">
+    <div><span style="background:#2ecc71"></span>Available</div>
+    <div><span style="background:#f39c12"></span>Pending</div>
+    <div><span style="background:#3498db"></span>Booked</div>
+    <div><span style="background:#95a5a6"></span>Locked</div>
+    <div><span style="background:#ccc"></span>Past</div>
+  </div>
+
+  <h2>📅 Availability Calendar</h2>
+  <div id="calendar"></div>
+
+  <!-- Admin Panel -->
+  <div id="adminPanel">
+    <h2>🔐 Admin Login</h2>
+    <input type="password" id="adminPass" placeholder="Enter Password" />
+    <button onclick="checkPassword()">Login</button>
+
+    <div id="adminContent" style="display:none; margin-top:20px;">
+      <h3>✅ Approved Bookings</h3>
+      <div id="approvedList"></div>
+      <p><button onclick="logout()" class="btn-logout">🔐 Logout</button></p>
+    </div>
+  </div>
+
+  <script>
+    // === CONFIGURATION ===
+    const ADMIN_PASSWORD = '9TulipsCH';
+    const TALLY_FORM_ID = '31e8BO';  // ← Your form ID
+    const FORM_URL = `https://tally.so/api/v1/entries?formId=${TALLY_FORM_ID}`;
+
+    // === STATE ===
+    let isAdminMode = false;
+    let allBookings = [];
+
+    // === DOM Elements ===
+    const calendar = document.getElementById('calendar');
+    const adminPanel = document.getElementById('adminPanel');
+    const adminContent = document.getElementById('adminContent');
+    const adminPass = document.getElementById('adminPass');
+    const approvedList = document.getElementById('approvedList');
+
+    // === 1. Load Bookings from Tally ===
+    async function loadFromTally() {
+      try {
+        const res = await fetch(FORM_URL);
+        const data = await res.json();
+        allBookings = data.entries || [];
+        generateCalendar();
+        if (isAdminMode) loadAllBookings();
+      } catch (err) {
+        console.error("Failed to load from Tally", err);
+        calendar.innerHTML = `<p style="color:red;">⚠️ Could not load calendar. Check your internet.</p>`;
+      }
     }
 
-    try {
-      // Get current file info (SHA)
-      const getRes = await fetch(`https://api.github.com/repos/${REPO_PATH}/contents/${FILE_PATH}`);
-      if (!getRes.ok) throw new Error(`Fetch failed: ${getRes.status}`);
-      const json = await getRes.json();
-      const sha = json.sha;
+    // === 2. Generate Calendar ===
+    function generateCalendar() {
+      const today = new Date();
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const bookedDates = new Set();
 
-      // Prepare updated content
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(sharedData, null, 2))));
+      // Extract all dates from Tally responses
+      allBookings.forEach(entry => {
+        const unit = entry.responses.find(r => r.fieldValue === "TULIP 1")?.fieldValue;
+        if (!unit) return;
 
-      // Update file
-      const putRes = await fetch(`https://api.github.com/repos/${REPO_PATH}/contents/${FILE_PATH}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${GITHUB_TOKEN}`,  // ✅ Use Bearer for fine-grained token
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: message,
-          content: content,
-          sha: sha,
-          committer: {
-            name: "TULIP Admin",
-            email: "admin@tulip.com"
+        const checkIn = entry.responses.find(r => r.date)?.date;
+        const checkOut = entry.responses.find(r => r.date)?.date;
+
+        if (checkIn && checkOut) {
+          const start = new Date(checkIn);
+          const end = new Date(checkOut);
+          let current = new Date(start);
+
+          while (current <= end) {
+            bookedDates.add(current.toISOString().split('T')[0]);
+            current.setDate(current.getDate() + 1);
           }
-        })
+        }
       });
 
-      if (putRes.ok) {
-        console.log("✅ Saved to GitHub");
-        return true;
+      calendar.innerHTML = '';
+      for (let m = 0; m < 3; m++) {
+        const monthDate = new Date(today.getFullYear(), today.getMonth() + m);
+        const month = monthDate.getMonth();
+        const year = monthDate.getFullYear();
+
+        const monthHeader = document.createElement('h3');
+        monthHeader.textContent = `${monthNames[month]} ${year}`;
+        monthHeader.style = "margin: 20px 0 10px 0; color: #2c3e50;";
+        calendar.appendChild(monthHeader);
+
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = '<tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr>';
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        let row = document.createElement('tr');
+
+        for (let i = 0; i < firstDay; i++) {
+          const cell = document.createElement('td');
+          cell.className = 'empty';
+          row.appendChild(cell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+          const cell = document.createElement('td');
+          cell.textContent = day;
+
+          const dateObj = new Date(year, month, day);
+          const dateStr = dateObj.toISOString().split('T')[0];
+
+          if (dateObj < today && dateObj.setHours(0,0,0,0) < today.setHours(0,0,0,0)) {
+            cell.className = 'past';
+          } else if (bookedDates.has(dateStr)) {
+            cell.className = 'approved';
+            const info = document.createElement('div');
+            info.className = 'booking-info';
+            info.textContent = 'Booked';
+            cell.appendChild(info);
+          } else {
+            cell.className = 'open';
+          }
+          row.appendChild(cell);
+          if ((day + firstDay) % 7 === 0 || day === daysInMonth) {
+            tbody.appendChild(row);
+            row = document.createElement('tr');
+          }
+        }
+        table.appendChild(tbody);
+        calendar.appendChild(table);
+      }
+    }
+
+    // === 3. Admin Login ===
+    function checkPassword() {
+      if (adminPass.value === ADMIN_PASSWORD) {
+        isAdminMode = true;
+        adminPass.style.display = 'none';
+        document.querySelector('#adminPanel button').style.display = 'none';
+        adminContent.style.display = 'block';
+        loadAllBookings();
       } else {
-        const err = await putRes.json();
-        console.error("Save failed:", err);
-        alert("❌ Save failed: " + err.message);
-        return false;
+        alert("❌ Wrong password!");
       }
-    } catch (err) {
-      console.error("Network error:", err);
-      alert("❌ Network error. Could not save.");
-      return false;
     }
-  }
 
-  // === 3. Generate Calendar (User View) ===
-  function generateCalendar() {
-    const today = new Date();
-    const bookings = sharedData.bookings || [];
-    const lockedDates = sharedData.locked || [];
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    function logout() {
+      isAdminMode = false;
+      adminContent.style.display = 'none';
+      adminPass.style.display = 'block';
+      adminPass.value = '';
+      document.querySelector('#adminPanel button').style.display = 'inline-block';
+    }
 
-    calendar.innerHTML = '';
-    for (let m = 0; m < 3; m++) {
-      const monthDate = new Date(today.getFullYear(), today.getMonth() + m);
-      const month = monthDate.getMonth();
-      const year = monthDate.getFullYear();
+    function loadAllBookings() {
+      const bookings = allBookings.filter(entry => {
+        return entry.responses.find(r => r.fieldValue === "TULIP 1");
+      });
 
-      const monthHeader = document.createElement('h3');
-      monthHeader.textContent = `${monthNames[month]} ${year}`;
-      monthHeader.style = "margin: 20px 0 10px 0; color: #2c3e50;";
-      calendar.appendChild(monthHeader);
-
-      const table = document.createElement('table');
-      const thead = document.createElement('thead');
-      thead.innerHTML = '<tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr>';
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      let row = document.createElement('tr');
-
-      for (let i = 0; i < firstDay; i++) {
-        const cell = document.createElement('td');
-        cell.className = 'empty';
-        row.appendChild(cell);
+      if (bookings.length === 0) {
+        approvedList.innerHTML = "<p>No bookings yet.</p>";
+        return;
       }
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const cell = document.createElement('td');
-        cell.textContent = day;
+      approvedList.innerHTML = "";
+      bookings.forEach(entry => {
+        const name = entry.responses.find(r => !r.date && r.fieldValue)?.fieldValue || "Guest";
+        const phone = entry.responses.find(r => r.phoneNumber)?.phoneNumber || "Not provided";
+        const checkIn = entry.responses.find(r => r.date)?.date || "";
+        const checkOut = entry.responses.find(r => r.date)?.date || "";
 
-        const dateObj = new Date(year, month, day);
-        const dateStr = dateObj.toISOString().split('T')[0];
-
-        if (dateObj < today && dateObj.setHours(0,0,0,0) < today.setHours(0,0,0,0)) {
-          cell.className = 'past';
-        } else {
-          if (lockedDates.includes(dateStr)) {
-            cell.className = 'locked';
-            cell.title = "Locked";
-          } else {
-            const booking = bookings.find(b => b.dates.includes(dateStr));
-            if (booking && booking.status === 'approved') {
-              cell.className = 'approved';
-              const info = document.createElement('div');
-              info.className = 'booking-info';
-              info.textContent = booking.name;
-              cell.appendChild(info);
-            } else if (booking && booking.status === 'pending') {
-              cell.className = 'pending';
-            } else {
-              cell.className = 'open';
-            }
-          }
-        }
-        row.appendChild(cell);
-        if ((day + firstDay) % 7 === 0 || day === daysInMonth) {
-          tbody.appendChild(row);
-          row = document.createElement('tr');
-        }
-      }
-      table.appendChild(tbody);
-      calendar.appendChild(table);
+        const item = document.createElement('div');
+        item.innerHTML = `
+          <strong>✅ ${name}</strong><br>
+          📞 ${phone}<br>
+          📅 ${checkIn} → ${checkOut}<br>
+          <hr>
+        `;
+        approvedList.appendChild(item);
+      });
     }
 
-    if (isAdminMode) generateAdminCalendar();
-  }
-
-  // === 4. Admin Calendar (with selection) ===
-  function generateAdminCalendar() {
-    const today = new Date();
-    const bookings = sharedData.bookings || [];
-    const lockedDates = sharedData.locked || [];
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    adminCalendar.innerHTML = '';
-
-    for (let m = 0; m < 3; m++) {
-      const monthDate = new Date(today.getFullYear(), today.getMonth() + m);
-      const month = monthDate.getMonth();
-      const year = monthDate.getFullYear();
-
-      const monthHeader = document.createElement('h3');
-      monthHeader.textContent = `${monthNames[month]} ${year}`;
-      monthHeader.style = "margin: 20px 0 10px 0; color: #2c3e50;";
-      adminCalendar.appendChild(monthHeader);
-
-      const table = document.createElement('table');
-      const thead = document.createElement('thead');
-      thead.innerHTML = '<tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr>';
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      let row = document.createElement('tr');
-
-      for (let i = 0; i < firstDay; i++) {
-        const cell = document.createElement('td');
-        cell.className = 'empty';
-        row.appendChild(cell);
-      }
-
-      for (let day = 1; day <= daysInMonth; day++) {
-        const cell = document.createElement('td');
-        cell.textContent = day;
-
-        const dateObj = new Date(year, month, day);
-        const dateStr = dateObj.toISOString().split('T')[0];
-
-        if (dateObj < today && dateObj.setHours(0,0,0,0) < today.setHours(0,0,0,0)) {
-          cell.className = 'past';
-        } else {
-          if (lockedDates.includes(dateStr)) {
-            cell.className = 'locked';
-          } else {
-            const booking = bookings.find(b => b.dates.includes(dateStr));
-            if (booking && booking.status === 'approved') {
-              cell.className = 'approved';
-            } else if (booking && booking.status === 'pending') {
-              cell.className = 'pending';
-            } else {
-              cell.className = 'open';
-            }
-          }
-        }
-
-        cell.onclick = () => {
-          if (cell.classList.contains('selected')) {
-            cell.classList.remove('selected');
-            adminSelectedDates = adminSelectedDates.filter(d => d !== dateStr);
-          } else {
-            cell.classList.add('selected');
-            adminSelectedDates.push(dateStr);
-          }
-        };
-
-        row.appendChild(cell);
-        if ((day + firstDay) % 7 === 0 || day === daysInMonth) {
-          tbody.appendChild(row);
-          row = document.createElement('tr');
-        }
-      }
-      table.appendChild(tbody);
-      adminCalendar.appendChild(table);
-    }
-  }
-
-  // === 5. Admin Functions ===
-  function checkPassword() {
-    if (adminPass.value === ADMIN_PASSWORD) {
-      isAdminMode = true;
-      adminPass.style.display = 'none';
-      document.querySelector('#adminPanel button').style.display = 'none';
-      adminContent.style.display = 'block';
-      loadAllBookings();
-      generateCalendar();
-    } else {
-      alert("❌ Wrong password!");
-    }
-  }
-
-  function logout() {
-    isAdminMode = false;
-    adminContent.style.display = 'none';
-    adminPass.style.display = 'block';
-    adminPass.value = '';
-    document.querySelector('#adminPanel button').style.display = 'inline-block';
-    adminSelectedDates = [];
-    generateCalendar();
-  }
-
-  function loadAllBookings() {
-    const bookings = sharedData.bookings || [];
-    const pending = bookings.filter(b => b.status === 'pending');
-    const approved = bookings.filter(b => b.status === 'approved');
-
-    const pendingDiv = document.getElementById('pendingList');
-    pendingDiv.innerHTML = pending.length ? '' : '<p>No pending bookings.</p>';
-    pending.forEach(b => {
-      const item = document.createElement('div');
-      item.innerHTML = `
-        <strong>${b.name}</strong> (${b.phone})<br>
-        ${b.dates.join(', ')}<br>
-        <button onclick="approve(${b.id})">✅ Approve</button>
-        <button onclick="reject(${b.id})" class="btn-delete">🗑️ Delete</button>
-        <hr>
-      `;
-      pendingDiv.appendChild(item);
-    });
-
-    const approvedDiv = document.getElementById('approvedList');
-    approvedDiv.innerHTML = approved.length ? '' : '<p>No approved bookings.</p>';
-    approved.forEach(b => {
-      const item = document.createElement('div');
-      item.innerHTML = `
-        <strong>✅ ${b.name}</strong><br>
-        📞 ${b.phone}<br>
-        📅 ${b.dates.join(', ')}<br>
-        <button onclick="unapprove(${b.id})" class="btn-delete">🗑️ Cancel</button>
-        <hr>
-      `;
-      approvedDiv.appendChild(item);
-    });
-  }
-
-  async function approve(id) {
-    const b = sharedData.bookings.find(b => b.id == id);
-    if (!b) return;
-
-    const conflict = sharedData.bookings.some(book =>
-      book.status === 'approved' &&
-      book.dates.some(d => b.dates.includes(d))
-    );
-    if (conflict) return alert("❌ Dates already booked.");
-
-    const overlapping = sharedData.bookings.filter(p =>
-      p.status === 'pending' && p.id != id &&
-      p.dates.some(d => b.dates.includes(d))
-    );
-
-    b.status = 'approved';
-    sharedData.bookings = sharedData.bookings.filter(book =>
-      !overlapping.some(p => p.id === book.id)
-    );
-
-    const saved = await saveData(`Approved: ${b.name}`);
-    if (saved) {
-      alert(`✅ Approved. ${overlapping.length} pending canceled.`);
-      loadAllBookings();
-      generateCalendar();
-    }
-  }
-
-  async function reject(id) {
-    sharedData.bookings = sharedData.bookings.filter(b => b.id != id);
-    const saved = await saveData("Rejected booking");
-    if (saved) {
-      alert("🗑️ Booking deleted.");
-      loadAllBookings();
-      generateCalendar();
-    }
-  }
-
-  async function unapprove(id) {
-    sharedData.bookings = sharedData.bookings.filter(b => b.id != id);
-    const saved = await saveData("Canceled booking");
-    if (saved) {
-      alert("❌ Booking canceled.");
-      loadAllBookings();
-      generateCalendar();
-    }
-  }
-
-  async function lockSelectedDates() {
-    if (adminSelectedDates.length === 0) return alert("Select dates to lock.");
-    sharedData.locked = [...new Set([...sharedData.locked, ...adminSelectedDates])];
-    const saved = await saveData(`Locked ${adminSelectedDates.length} dates`);
-    if (saved) {
-      alert("✅ Locked.");
-      adminSelectedDates = [];
-      generateCalendar();
-    }
-  }
-
-  async function unlockSelectedDates() {
-    if (adminSelectedDates.length === 0) return alert("Select dates to unlock.");
-    sharedData.locked = sharedData.locked.filter(d => !adminSelectedDates.includes(d));
-    const saved = await saveData(`Unlocked ${adminSelectedDates.length} dates`);
-    if (saved) {
-      alert("🔓 Unlocked.");
-      adminSelectedDates = [];
-      generateCalendar();
-    }
-  }
-
-  // === Initialize ===
-  loadData();
-</script>
+    // === Initialize ===
+    loadFromTally();
+  </script>
+</body>
+</html>
