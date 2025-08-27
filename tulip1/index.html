@@ -3,363 +3,133 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TULIP 1: B8-3-5</title>
+  <title>Unit Calendar</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      padding: 20px;
-      background: #f8f9fa;
-      color: #333;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    h1, h2, h3 {
-      color: #2c3e50;
-    }
-    .back-btn {
-      display: inline-block;
-      background: #007bff;
-      color: white;
-      text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    .back-btn:hover {
-      background: #0056b3;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0 30px 0;
-    }
-    th {
-      background: #007bff;
-      color: white;
-      padding: 8px;
-    }
-    td {
-      text-align: center;
-      padding: 8px;
-      height: 40px;
-      border: 1px solid #ddd;
-    }
-    .past { background: #ccc; color: #777; }
-    .open { background: #2ecc71; color: white; }
-    .pending { background: #f39c12; color: white; }
-    .approved { background: #3498db; color: white; }
-    .locked { background: #95a5a6; color: white; }
-    .selected { 
-      background: #e67e22 !important; 
-      color: white; 
-      position: relative;
-      transform: scale(1.1);
-      z-index: 5;
-    }
-    .approved:hover, .locked:hover, .selected:hover { 
-      transform: scale(1.1); 
-    }
-    input, button {
-      padding: 12px;
-      margin: 10px 0;
-      width: 100%;
-      font-size: 16px;
-    }
-    button {
-      background: #27ae60;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    button:hover {
-      background: #219653;
-    }
-    .btn-delete {
-      background: #e74c3c !important;
-    }
-    .btn-delete:hover {
-      background: #c0392b !important;
-    }
-    .btn-logout {
-      background: #95a5a6 !important;
-    }
-    .btn-logout:hover {
-      background: #7f8c8d !important;
-    }
-    #status {
-      margin: 15px 0;
-      padding: 10px;
-      background: #d5f5e3;
-      border-radius: 5px;
-    }
-    .legend {
-      margin: 15px 0;
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      font-size: 14px;
-    }
-    .legend div {
-      display: flex;
-      align-items: center;
-    }
-    .legend span {
-      width: 15px;
-      height: 15px;
-      margin-right: 5px;
-      display: inline-block;
-      border-radius: 3px;
-    }
-    .booking-info {
-      font-size: 12px;
-      margin-top: 2px;
-    }
-    .my-booking {
-      background: #f8d7da;
-      border: 1px solid #f5c6cb;
-      padding: 15px;
-      border-radius: 5px;
-      margin: 15px 0;
-    }
-    .prices {
-      background: #e8f4f8;
-      padding: 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-      font-size: 14px;
-    }
-    .prices h4 {
-      margin: 10px 0 5px 0;
-      color: #2c3e50;
-    }
-    .whatsapp-btn {
-      display: block;
-      background: #25D366;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin: 20px 0;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    .whatsapp-btn:hover {
-      background: #128C7E;
-    }
+    body {{ font-family: Arial, sans-serif; padding: 20px; background: #f8f9fa; max-width: 800px; margin:auto; }}
+    h1 {{ color: #2c3e50; }}
+    table {{ width:100%; border-collapse: collapse; margin:20px 0; }}
+    th, td {{ border:1px solid #ccc; padding:8px; text-align:center; }}
+    .past {{ background:#ccc; color:#777; }}
+    .open {{ background:#2ecc71; color:white; }}
+    .locked {{ background:#95a5a6; color:white; }}
+    .back-btn {{ display:inline-block; margin-bottom:20px; padding:10px 15px; background:#007bff; color:#fff; text-decoration:none; border-radius:5px; }}
   </style>
 </head>
 <body>
-  <!-- Back to Main Page -->
   <a href="https://rota2903.github.io/new-tulip-page" class="back-btn">← Back to Units</a>
-
-  <h1>🏡 TULIP 1: B8-3-5</h1>
-
-  <!-- WhatsApp Booking Button -->
-  <a href="https://wa.me/60123456789?text=Hi, I'd like to book TULIP 1" class="whatsapp-btn">📱 Book via WhatsApp</a>
-
-  <!-- Price Information -->
-  <div class="prices">
-    <h4>💰 Pricing (Per Night)</h4>
-    <ul>
-      <li>Daily: RM200</li>
-      <li>Weekend (Fri-Sun): RM250</li>
-      <li>Peak Weekend (Fri-Sun): RM300</li>
-    </ul>
-    <p><strong>Discount Price:</strong> Contact admin for special rates.</p>
-  </div>
-
-  <div class="legend">
-    <div><span style="background:#2ecc71"></span>Available</div>
-    <div><span style="background:#f39c12"></span>Pending</div>
-    <div><span style="background:#3498db"></span>Booked</div>
-    <div><span style="background:#95a5a6"></span>Locked</div>
-    <div><span style="background:#ccc"></span>Past</div>
-  </div>
-
-  <h2>📅 Availability Calendar</h2>
+  <h1>📅 Availability Calendar</h1>
   <div id="calendar"></div>
-
-  <!-- Admin Panel -->
   <div id="adminPanel">
     <h2>🔐 Admin Login</h2>
     <input type="password" id="adminPass" placeholder="Enter Password" />
     <button onclick="checkPassword()">Login</button>
-
-    <div id="adminContent" style="display:none; margin-top:20px;">
-      <h3>✅ Approved Bookings</h3>
-      <div id="approvedList"></div>
-      <p><button onclick="logout()" class="btn-logout">🔐 Logout</button></p>
+    <div id="adminContent" style="display:none;">
+      <p><button onclick="logout()">Logout</button></p>
     </div>
   </div>
 
-  <script>
-    // === CONFIGURATION ===
-    const ADMIN_PASSWORD = '9TulipsCH';
-    const TALLY_FORM_ID = '31e8BO';  // ← Your form ID
-    const FORM_URL = `https://tally.so/api/v1/entries?formId=${TALLY_FORM_ID}`;
+<script>
+const BIN_ID = "68ae6c90ae596e708fd7f96f";
+const API_URL = `https://api.jsonbin.io/v3/b/${{BIN_ID}}`;
+const MASTER_KEY = ""; // public read-only
+const ADMIN_PASSWORD = "9TulipsCH";
 
-    // === STATE ===
-    let isAdminMode = false;
-    let allBookings = [];
+let isAdminMode = false;
+let bookings = [];
 
-    // === DOM Elements ===
-    const calendar = document.getElementById('calendar');
-    const adminPanel = document.getElementById('adminPanel');
-    const adminContent = document.getElementById('adminContent');
-    const adminPass = document.getElementById('adminPass');
-    const approvedList = document.getElementById('approvedList');
+async function loadBookings() {{
+  try {{
+    const res = await fetch(API_URL, {{ headers: {{ "X-Master-Key": MASTER_KEY }} }});
+    const data = await res.json();
+    bookings = data.record || [];
+    renderCalendar();
+  }} catch (e) {{
+    document.getElementById('calendar').innerHTML = "⚠️ Cannot load calendar.";
+  }}
+}}
 
-    // === 1. Load Bookings from Tally ===
-    async function loadFromTally() {
-      try {
-        const res = await fetch(FORM_URL);
-        const data = await res.json();
-        allBookings = data.entries || [];
-        generateCalendar();
-        if (isAdminMode) loadAllBookings();
-      } catch (err) {
-        console.error("Failed to load from Tally", err);
-        calendar.innerHTML = `<p style="color:red;">⚠️ Could not load calendar. Check your internet.</p>`;
-      }
-    }
+function renderCalendar() {{
+  const calendar = document.getElementById('calendar');
+  const today = new Date();
+  calendar.innerHTML = "";
 
-    // === 2. Generate Calendar ===
-    function generateCalendar() {
-      const today = new Date();
-      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const bookedDates = new Set();
+  for (let m=0; m<3; m++) {{
+    const monthDate = new Date(today.getFullYear(), today.getMonth()+m, 1);
+    const year = monthDate.getFullYear();
+    const month = monthDate.getMonth();
+    const daysInMonth = new Date(year, month+1, 0).getDate();
 
-      // Extract all dates from Tally responses
-      allBookings.forEach(entry => {
-        const unit = entry.responses.find(r => r.fieldValue === "TULIP 1")?.fieldValue;
-        if (!unit) return;
+    const monthName = monthDate.toLocaleString('default', {{ month:'long' }});
+    const h3 = document.createElement('h3');
+    h3.textContent = monthName + " " + year;
+    calendar.appendChild(h3);
 
-        const checkIn = entry.responses.find(r => r.date)?.date;
-        const checkOut = entry.responses.find(r => r.date)?.date;
+    const table = document.createElement('table');
+    const header = document.createElement('tr');
+    header.innerHTML = "<th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>";
+    table.appendChild(header);
 
-        if (checkIn && checkOut) {
-          const start = new Date(checkIn);
-          const end = new Date(checkOut);
-          let current = new Date(start);
+    let row = document.createElement('tr');
+    const firstDay = new Date(year, month, 1).getDay();
+    for (let i=0; i<firstDay; i++) row.appendChild(document.createElement('td'));
 
-          while (current <= end) {
-            bookedDates.add(current.toISOString().split('T')[0]);
-            current.setDate(current.getDate() + 1);
-          }
-        }
-      });
+    for (let d=1; d<=daysInMonth; d++) {{
+      const cell = document.createElement('td');
+      cell.textContent = d;
+      const dateStr = `${{year}}-${{String(month+1).padStart(2,'0')}}-${{String(d).padStart(2,'0')}}`;
 
-      calendar.innerHTML = '';
-      for (let m = 0; m < 3; m++) {
-        const monthDate = new Date(today.getFullYear(), today.getMonth() + m);
-        const month = monthDate.getMonth();
-        const year = monthDate.getFullYear();
+      let status = bookings.find(b => b.date === dateStr)?.status || "open";
+      if (new Date(dateStr) < new Date().setHours(0,0,0,0)) status = "past";
 
-        const monthHeader = document.createElement('h3');
-        monthHeader.textContent = `${monthNames[month]} ${year}`;
-        monthHeader.style = "margin: 20px 0 10px 0; color: #2c3e50;";
-        calendar.appendChild(monthHeader);
+      cell.className = status;
 
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr>';
-        table.appendChild(thead);
+      if (isAdminMode && status !== "past") {{
+        cell.onclick = () => toggleDate(dateStr, status);
+      }}
+      row.appendChild(cell);
+      if ((d+firstDay)%7===0 || d===daysInMonth) {{
+        table.appendChild(row);
+        row = document.createElement('tr');
+      }}
+    }}
+    calendar.appendChild(table);
+  }}
+}}
 
-        const tbody = document.createElement('tbody');
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        let row = document.createElement('tr');
+async function toggleDate(dateStr, currentStatus) {{
+  let newStatus = currentStatus==="locked" ? "open" : "locked";
+  bookings = bookings.filter(b => b.date !== dateStr);
+  bookings.push({{ date: dateStr, status: newStatus }});
+  await saveBookings();
+  renderCalendar();
+}}
 
-        for (let i = 0; i < firstDay; i++) {
-          const cell = document.createElement('td');
-          cell.className = 'empty';
-          row.appendChild(cell);
-        }
+async function saveBookings() {{
+  await fetch(API_URL, {{
+    method: "PUT",
+    headers: {{ "Content-Type":"application/json", "X-Master-Key": MASTER_KEY }},
+    body: JSON.stringify(bookings)
+  }});
+}}
 
-        for (let day = 1; day <= daysInMonth; day++) {
-          const cell = document.createElement('td');
-          cell.textContent = day;
+function checkPassword() {{
+  const pass = document.getElementById('adminPass').value;
+  if (pass === ADMIN_PASSWORD) {{
+    isAdminMode = true;
+    document.getElementById('adminContent').style.display = "block";
+    document.getElementById('adminPass').style.display = "none";
+  }} else {{
+    alert("Wrong password");
+  }}
+}}
 
-          const dateObj = new Date(year, month, day);
-          const dateStr = dateObj.toISOString().split('T')[0];
+function logout() {{
+  isAdminMode = false;
+  document.getElementById('adminContent').style.display = "none";
+  document.getElementById('adminPass').style.display = "block";
+}}
 
-          if (dateObj < today && dateObj.setHours(0,0,0,0) < today.setHours(0,0,0,0)) {
-            cell.className = 'past';
-          } else if (bookedDates.has(dateStr)) {
-            cell.className = 'approved';
-            const info = document.createElement('div');
-            info.className = 'booking-info';
-            info.textContent = 'Booked';
-            cell.appendChild(info);
-          } else {
-            cell.className = 'open';
-          }
-          row.appendChild(cell);
-          if ((day + firstDay) % 7 === 0 || day === daysInMonth) {
-            tbody.appendChild(row);
-            row = document.createElement('tr');
-          }
-        }
-        table.appendChild(tbody);
-        calendar.appendChild(table);
-      }
-    }
-
-    // === 3. Admin Login ===
-    function checkPassword() {
-      if (adminPass.value === ADMIN_PASSWORD) {
-        isAdminMode = true;
-        adminPass.style.display = 'none';
-        document.querySelector('#adminPanel button').style.display = 'none';
-        adminContent.style.display = 'block';
-        loadAllBookings();
-      } else {
-        alert("❌ Wrong password!");
-      }
-    }
-
-    function logout() {
-      isAdminMode = false;
-      adminContent.style.display = 'none';
-      adminPass.style.display = 'block';
-      adminPass.value = '';
-      document.querySelector('#adminPanel button').style.display = 'inline-block';
-    }
-
-    function loadAllBookings() {
-      const bookings = allBookings.filter(entry => {
-        return entry.responses.find(r => r.fieldValue === "TULIP 1");
-      });
-
-      if (bookings.length === 0) {
-        approvedList.innerHTML = "<p>No bookings yet.</p>";
-        return;
-      }
-
-      approvedList.innerHTML = "";
-      bookings.forEach(entry => {
-        const name = entry.responses.find(r => !r.date && r.fieldValue)?.fieldValue || "Guest";
-        const phone = entry.responses.find(r => r.phoneNumber)?.phoneNumber || "Not provided";
-        const checkIn = entry.responses.find(r => r.date)?.date || "";
-        const checkOut = entry.responses.find(r => r.date)?.date || "";
-
-        const item = document.createElement('div');
-        item.innerHTML = `
-          <strong>✅ ${name}</strong><br>
-          📞 ${phone}<br>
-          📅 ${checkIn} → ${checkOut}<br>
-          <hr>
-        `;
-        approvedList.appendChild(item);
-      });
-    }
-
-    // === Initialize ===
-    loadFromTally();
-  </script>
+loadBookings();
+</script>
 </body>
 </html>
