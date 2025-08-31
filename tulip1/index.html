@@ -404,6 +404,15 @@
             background: #ff7f00;
         }
         
+        .unlock-date {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .unlock-date:hover {
+            background: #27ae60;
+        }
+        
         .clear-selection {
             background: #6a11cb;
             color: white;
@@ -418,6 +427,60 @@
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #eee;
+        }
+        
+        /* Confirmation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .modal-confirm {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .modal-cancel {
+            background: #95a5a6;
+            color: white;
         }
         
         /* Footer */
@@ -455,6 +518,10 @@
             .admin-form {
                 flex-direction: column;
             }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -468,7 +535,7 @@
                 </div>
             </div>
             
-            <a href="#" class="back-button">
+            <a href="#" class="back-button" id="back-button">
                 <i class="fas fa-arrow-left"></i>
                 Back To Units
             </a>
@@ -615,6 +682,10 @@
                         <i class="fas fa-tools"></i>
                         Mark for Maintenance
                     </button>
+                    <button class="admin-btn unlock-date" id="unlock-btn">
+                        <i class="fas fa-unlock"></i>
+                        Unlock Dates
+                    </button>
                     <button class="admin-btn clear-selection" id="clear-btn">
                         <i class="fas fa-times"></i>
                         Clear Selection
@@ -626,6 +697,18 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modal-title">Confirm Action</h3>
+            <p id="modal-message">Are you sure you want to perform this action?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-cancel" id="modal-cancel">Cancel</button>
+                <button class="modal-btn modal-confirm" id="modal-confirm">Confirm</button>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -649,6 +732,7 @@
             let currentMonth = currentDate.getMonth();
             let selectedDates = [];
             let isAdminLoggedIn = false;
+            let currentAction = null;
             
             const calendarDays = document.getElementById('calendar-days');
             const prevMonthBtn = document.getElementById('prev-month');
@@ -658,10 +742,17 @@
             const adminPanel = document.getElementById('admin-panel');
             const lockDateBtn = document.getElementById('lock-date-btn');
             const maintenanceBtn = document.getElementById('maintenance-btn');
+            const unlockBtn = document.getElementById('unlock-btn');
             const clearBtn = document.getElementById('clear-btn');
+            const backButton = document.getElementById('back-button');
+            const modal = document.getElementById('confirmation-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            const modalConfirm = document.getElementById('modal-confirm');
+            const modalCancel = document.getElementById('modal-cancel');
             
             // Sample booked dates
-            const bookedDates = [
+            let bookedDates = [
                 '2023-11-05',
                 '2023-11-06',
                 '2023-11-07',
@@ -674,7 +765,7 @@
             ];
             
             // Sample maintenance dates
-            const maintenanceDates = [
+            let maintenanceDates = [
                 '2023-11-12',
                 '2023-11-13'
             ];
@@ -723,13 +814,13 @@
                     }
                     else {
                         dayElement.classList.add('available');
-                        
-                        // Add click event for admins to select dates
-                        if (isAdminLoggedIn) {
-                            dayElement.addEventListener('click', function() {
-                                toggleDateSelection(dayElement, dateString);
-                            });
-                        }
+                    }
+                    
+                    // Add click event for admins to select dates
+                    if (isAdminLoggedIn) {
+                        dayElement.addEventListener('click', function() {
+                            toggleDateSelection(dayElement, dateString);
+                        });
                     }
                     
                     calendarDays.appendChild(dayElement);
@@ -738,13 +829,31 @@
             
             // Toggle date selection for admin actions
             function toggleDateSelection(dayElement, dateString) {
-                if (dayElement.classList.contains('selected')) {
+                if (selectedDates.includes(dateString)) {
                     dayElement.classList.remove('selected');
                     selectedDates = selectedDates.filter(date => date !== dateString);
                 } else {
                     dayElement.classList.add('selected');
                     selectedDates.push(dateString);
                 }
+            }
+            
+            // Show confirmation modal
+            function showModal(action, dates) {
+                currentAction = action;
+                
+                if (action === 'book') {
+                    modalTitle.textContent = 'Mark Dates as Booked';
+                    modalMessage.textContent = `Are you sure you want to mark the following dates as booked? ${dates.join(', ')}`;
+                } else if (action === 'maintenance') {
+                    modalTitle.textContent = 'Mark Dates for Maintenance';
+                    modalMessage.textContent = `Are you sure you want to mark the following dates for maintenance? ${dates.join(', ')}`;
+                } else if (action === 'unlock') {
+                    modalTitle.textContent = 'Unlock Dates';
+                    modalMessage.textContent = `Are you sure you want to unlock the following dates? ${dates.join(', ')}`;
+                }
+                
+                modal.style.display = 'flex';
             }
             
             // Admin login functionality
@@ -767,6 +876,8 @@
                 isAdminLoggedIn = false;
                 adminPanel.style.display = 'none';
                 selectedDates = [];
+                document.getElementById('admin-username').value = '';
+                document.getElementById('admin-password').value = '';
                 alert('You have been logged out.');
                 generateCalendar(currentYear, currentMonth); // Refresh calendar without admin privileges
             });
@@ -778,21 +889,7 @@
                     return;
                 }
                 
-                // In a real application, this would update a database
-                selectedDates.forEach(date => {
-                    if (!bookedDates.includes(date)) {
-                        bookedDates.push(date);
-                    }
-                    // Remove from maintenance if it was there
-                    const maintenanceIndex = maintenanceDates.indexOf(date);
-                    if (maintenanceIndex !== -1) {
-                        maintenanceDates.splice(maintenanceIndex, 1);
-                    }
-                });
-                
-                alert(`Dates marked as booked: ${selectedDates.join(', ')}`);
-                selectedDates = [];
-                generateCalendar(currentYear, currentMonth);
+                showModal('book', selectedDates);
             });
             
             // Mark dates for maintenance
@@ -802,27 +899,90 @@
                     return;
                 }
                 
-                // In a real application, this would update a database
-                selectedDates.forEach(date => {
-                    if (!maintenanceDates.includes(date)) {
-                        maintenanceDates.push(date);
-                    }
-                    // Remove from booked if it was there
-                    const bookedIndex = bookedDates.indexOf(date);
-                    if (bookedIndex !== -1) {
-                        bookedDates.splice(bookedIndex, 1);
-                    }
-                });
+                showModal('maintenance', selectedDates);
+            });
+            
+            // Unlock dates
+            unlockBtn.addEventListener('click', function() {
+                if (selectedDates.length === 0) {
+                    alert('Please select dates to unlock.');
+                    return;
+                }
                 
-                alert(`Dates marked for maintenance: ${selectedDates.join(', ')}`);
-                selectedDates = [];
-                generateCalendar(currentYear, currentMonth);
+                showModal('unlock', selectedDates);
             });
             
             // Clear selection
             clearBtn.addEventListener('click', function() {
                 selectedDates = [];
                 generateCalendar(currentYear, currentMonth);
+            });
+            
+            // Back button functionality
+            backButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                // In a real application, this would navigate back to the units page
+                alert('Navigating back to units page...');
+            });
+            
+            // Modal functionality
+            modalConfirm.addEventListener('click', function() {
+                if (currentAction === 'book') {
+                    // Mark as booked
+                    selectedDates.forEach(date => {
+                        if (!bookedDates.includes(date)) {
+                            bookedDates.push(date);
+                        }
+                        // Remove from maintenance if it was there
+                        const maintenanceIndex = maintenanceDates.indexOf(date);
+                        if (maintenanceIndex !== -1) {
+                            maintenanceDates.splice(maintenanceIndex, 1);
+                        }
+                    });
+                    alert(`Dates marked as booked: ${selectedDates.join(', ')}`);
+                } else if (currentAction === 'maintenance') {
+                    // Mark for maintenance
+                    selectedDates.forEach(date => {
+                        if (!maintenanceDates.includes(date)) {
+                            maintenanceDates.push(date);
+                        }
+                        // Remove from booked if it was there
+                        const bookedIndex = bookedDates.indexOf(date);
+                        if (bookedIndex !== -1) {
+                            bookedDates.splice(bookedIndex, 1);
+                        }
+                    });
+                    alert(`Dates marked for maintenance: ${selectedDates.join(', ')}`);
+                } else if (currentAction === 'unlock') {
+                    // Unlock dates
+                    selectedDates.forEach(date => {
+                        const bookedIndex = bookedDates.indexOf(date);
+                        if (bookedIndex !== -1) {
+                            bookedDates.splice(bookedIndex, 1);
+                        }
+                        
+                        const maintenanceIndex = maintenanceDates.indexOf(date);
+                        if (maintenanceIndex !== -1) {
+                            maintenanceDates.splice(maintenanceIndex, 1);
+                        }
+                    });
+                    alert(`Dates unlocked: ${selectedDates.join(', ')}`);
+                }
+                
+                selectedDates = [];
+                modal.style.display = 'none';
+                generateCalendar(currentYear, currentMonth);
+            });
+            
+            modalCancel.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
             });
             
             // Initial calendar generation
@@ -845,13 +1005,6 @@
                     currentYear++;
                 }
                 generateCalendar(currentYear, currentMonth);
-            });
-            
-            // Back button functionality
-            document.querySelector('.back-button').addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Navigating back to units page...');
-                // In a real application, this would be: window.location.href = 'units.html';
             });
         });
     </script>
