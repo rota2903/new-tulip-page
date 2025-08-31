@@ -1,301 +1,628 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TULIP 1</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 20px;
-      max-width: 800px;
-      margin: auto;
-      line-height: 1.6;
-      background: #f8f9fa;
-      color: #2c3e50;
-    }
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-    }
-    .info {
-      background: #e8f5e8;
-      padding: 15px;
-      border-radius: 8px;
-      margin: 20px 0;
-      font-size: 16px;
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 10px;
-      margin: 20px 0;
-    }
-    img {
-      width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .whatsapp {
-      display: block;
-      background: #25D366;
-      color: white;
-      text-align: center;
-      padding: 16px;
-      margin: 20px 0;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 18px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-    }
-    th {
-      background: #34495e;
-      color: white;
-      padding: 12px;
-    }
-    td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-    .available { background: #2ecc71; color: white; }
-    .booked { background: #e74c3c; color: white; font-weight: bold; }
-    .maintenance { background: #f39c12; color: white; }
-    .legend {
-      text-align: center;
-      margin: 20px 0;
-      font-size: 16px;
-    }
-    .legend span {
-      padding: 8px 15px;
-      margin: 5px;
-      border-radius: 5px;
-      color: white;
-      font-size: 14px;
-    }
-    #adminLogin {
-      text-align: center;
-      margin: 30px 0;
-    }
-    #adminLogin input {
-      padding: 10px;
-      width: 200px;
-      margin-right: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      padding: 10px 15px;
-      background: #3498db;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    #adminPanel {
-      display: none;
-      margin: 20px 0;
-      text-align: center;
-    }
-    .back-btn {
-      display: inline-block;
-      margin: 10px 0;
-      padding: 8px 16px;
-      background: #555;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tulip 1 - Premium Vacation Rental</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: #ffdd40;
+        }
+        
+        /* Navigation */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .back-button i {
+            margin-right: 8px;
+        }
+        
+        /* Unit Info Section */
+        .unit-info {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .unit-title {
+            color: #6a11cb;
+            font-size: 32px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .unit-title i {
+            margin-right: 12px;
+            color: #ff6b6b;
+        }
+        
+        .unit-description {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .feature {
+            background: #f3f4ff;
+            padding: 12px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .feature i {
+            margin-right: 8px;
+            color: #6a11cb;
+        }
+        
+        /* Gallery Section */
+        .gallery-section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            font-size: 28px;
+            color: #6a11cb;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .gallery-item {
+            height: 220px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-placeholder {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        /* Calendar Section */
+        .calendar-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .calendar {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-title {
+            font-size: 24px;
+            color: #6a11cb;
+            font-weight: 600;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .calendar-nav button {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .calendar-nav button:hover {
+            background: #2575fc;
+        }
+        
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            color: #6a11cb;
+            margin-bottom: 10px;
+        }
+        
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        
+        .day {
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .day.available {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .day.booked {
+            background: #ffebee;
+            color: #c62828;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        
+        .day.current {
+            background: #6a11cb;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .day:hover:not(.booked):not(.empty) {
+            background: #bbdefb;
+        }
+        
+        .day.empty {
+            background: transparent;
+            cursor: default;
+        }
+        
+        /* Admin Section */
+        .admin-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .admin-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .admin-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-btn i {
+            margin-right: 8px;
+        }
+        
+        .lock-date {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .lock-date:hover {
+            background: #ff4757;
+        }
+        
+        .mark-maintenance {
+            background: #ff9f43;
+            color: white;
+        }
+        
+        .mark-maintenance:hover {
+            background: #ff7f00;
+        }
+        
+        .add-booking {
+            background: #6a11cb;
+            color: white;
+        }
+        
+        .add-booking:hover {
+            background: #2575fc;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .features {
+                justify-content: center;
+            }
+            
+            .admin-controls {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-spa"></i>
+                    Tulip Vacation Rentals
+                </div>
+            </div>
+            
+            <a href="#" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back To Units
+            </a>
+        </div>
+    </header>
 
-  <!-- Back Button -->
-  <a href="index.html" class="back-btn">← Back to Units</a>
+    <div class="container">
+        <!-- Unit Information Section -->
+        <section class="unit-info">
+            <h1 class="unit-title">
+                <i class="fas fa-home"></i>
+                Tulip 1 - Luxury Beachfront Villa
+            </h1>
+            <p class="unit-description">
+                Experience luxury living in our stunning beachfront villa. Tulip 1 features panoramic ocean views, a private infinity pool, and exclusive access to white sandy beaches. This 3-bedroom, 2-bathroom villa is perfect for families or groups seeking a memorable vacation experience.
+            </p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-bed"></i>
+                    3 Bedrooms
+                </div>
+                <div class="feature">
+                    <i class="fas fa-bath"></i>
+                    2 Bathrooms
+                </div>
+                <div class="feature">
+                    <i class="fas fa-users"></i>
+                    Sleeps 6
+                </div>
+                <div class="feature">
+                    <i class="fas fa-swimming-pool"></i>
+                    Private Pool
+                </div>
+                <div class="feature">
+                    <i class="fas fa-wifi"></i>
+                    High-Speed WiFi
+                </div>
+                <div class="feature">
+                    <i class="fas fa-utensils"></i>
+                    Fully Equipped Kitchen
+                </div>
+            </div>
+        </section>
 
-  <h1>TULIP 1</h1>
+        <!-- Gallery Section -->
+        <section class="gallery-section">
+            <h2 class="section-title">
+                <i class="fas fa-camera"></i>
+                Photo Gallery
+            </h2>
+            
+            <div class="gallery">
+                <div class="gallery-item gallery-placeholder">
+                    <div>Image 1 (To be added)</div>
+                </div>
+                <div class="gallery-item gallery-placeholder">
+                    <div>Image 2 (To be added)</div>
+                </div>
+                <div class="gallery-item gallery-placeholder">
+                    <div>Image 3 (To be added)</div>
+                </div>
+                <div class="gallery-item gallery-placeholder">
+                    <div>Image 4 (To be added)</div>
+                </div>
+                <div class="gallery-item gallery-placeholder">
+                    <div>Image 5 (To be added)</div>
+                </div>
+                <div class="gallery-item gallery-placeholder">
+                    <div>Image 6 (To be added)</div>
+                </div>
+            </div>
+        </section>
 
-  <!-- Basic Info -->
-  <div class="info">
-    <p><strong>Price:</strong> RM 280/night</p>
-    <p><strong>Location:</strong> Near City Center</p>
-    <p><strong>Capacity:</strong> 2 guests</p>
-  </div>
+        <!-- Calendar Section -->
+        <section class="calendar-section">
+            <h2 class="section-title">
+                <i class="fas fa-calendar-alt"></i>
+                Availability Calendar
+            </h2>
+            
+            <div class="calendar">
+                <div class="calendar-header">
+                    <h3 class="calendar-title">November 2023</h3>
+                    <div class="calendar-nav">
+                        <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                
+                <div class="days" id="calendar-days">
+                    <!-- Calendar days will be generated by JavaScript -->
+                </div>
+            </div>
+        </section>
 
-  <!-- Image Gallery -->
-  <div class="gallery">
-    <img src="img1.jpg" alt="Room">
-    <img src="img2.jpg" alt="Room">
-    <img src="img3.jpg" alt="Room">
-    <img src="img4.jpg" alt="Room">
-    <img src="img5.jpg" alt="Room">
-    <img src="img6.jpg" alt="Room">
-  </div>
+        <!-- Admin Section -->
+        <section class="admin-section">
+            <h2 class="section-title">
+                <i class="fas fa-lock"></i>
+                Admin Access
+            </h2>
+            <p>Manage availability, bookings, and maintenance schedules for this unit.</p>
+            
+            <div class="admin-controls">
+                <button class="admin-btn lock-date">
+                    <i class="fas fa-lock"></i>
+                    Lock Dates
+                </button>
+                <button class="admin-btn mark-maintenance">
+                    <i class="fas fa-tools"></i>
+                    Mark for Maintenance
+                </button>
+                <button class="admin-btn add-booking">
+                    <i class="fas fa-calendar-plus"></i>
+                    Add Booking
+                </button>
+            </div>
+        </section>
+    </div>
 
-  <!-- WhatsApp Button -->
-  <a href="https://wa.me/6011112231979?text=Hi, I'd like to book TULIP 1" class="whatsapp">
-     📱 Book via WhatsApp
-  </a>
+    <footer>
+        <div class="container">
+            <p>© 2023 Tulip Vacation Rentals. All rights reserved.</p>
+        </div>
+    </footer>
 
-  <!-- Calendar for Customers -->
-  <h2>📅 Availability Calendar</h2>
-  <div class="legend">
-    <span class="available">Available</span>
-    <span class="booked">Booked</span>
-    <span class="maintenance">Maintenance</span>
-  </div>
-  <div id="calendar">Loading availability...</div>
-
-  <!-- Admin Login -->
-  <div id="adminLogin">
-    <h3>🔐 Admin Access</h3>
-    <input type="password" id="adminPass" placeholder="Enter Password">
-    <button onclick="login()">Login</button>
-  </div>
-
-  <!-- Admin Panel -->
-  <div id="adminPanel">
-    <h3>✅ You are logged in</h3>
-    <p>Click any date to change its status (Available → Booked → Maintenance).</p>
-    <button onclick="logout()">Logout</button>
-    <div id="adminCalendar"></div>
-  </div>
-
-  <script>
-    // Admin password
-    const ADMIN_PASSWORD = "9TulipsCH";
-
-    // 🔥 Supabase Configuration — DO NOT CHANGE
-    const SUPABASE_URL = "https://cpoymmqqrrttgpkanjdt.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwb3ltcXFycnRydGdwa2FuamR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMDAzMTcsImV4cCI6MjA3MTg3NjMxN30.hXN-c5Gqv068XTfHDuXOMx9_a-UEHETloVf9PZqP2y0";
-    const UNIT = "tulip1";
-    const TABLE = "bookings";
-
-    const API = `${SUPABASE_URL}/rest/v1/${TABLE}`;
-
-    let isLoggedIn = false;
-    let bookings = {};
-
-    // Load bookings for this unit
-    async function loadBookings() {
-      try {
-        const res = await fetch(
-          `${API}?select=date,status&unit=eq.${UNIT}`,
-          {
-            method: 'GET',
-            headers: {
-              'apikey': SUPABASE_ANON_KEY,
-              'Content-Type': 'application/json'
+    <script>
+        // Calendar functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentDate = new Date();
+            let currentYear = currentDate.getFullYear();
+            let currentMonth = currentDate.getMonth();
+            
+            const calendarDays = document.getElementById('calendar-days');
+            const prevMonthBtn = document.getElementById('prev-month');
+            const nextMonthBtn = document.getElementById('next-month');
+            
+            // Sample booked dates (in a real app, this would come from a database)
+            const bookedDates = [
+                '2023-11-05',
+                '2023-11-06',
+                '2023-11-07',
+                '2023-11-15',
+                '2023-11-16',
+                '2023-11-22',
+                '2023-11-23',
+                '2023-11-24',
+                '2023-11-25'
+            ];
+            
+            // Function to generate calendar
+            function generateCalendar(year, month) {
+                calendarDays.innerHTML = '';
+                
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                                    "July", "August", "September", "October", "November", "December"];
+                
+                document.querySelector('.calendar-title').textContent = `${monthNames[month]} ${year}`;
+                
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                // Create empty slots for days before the first day of the month
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.classList.add('day', 'empty');
+                    calendarDays.appendChild(emptyDay);
+                }
+                
+                // Create days for the month
+                const today = new Date();
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('day');
+                    dayElement.textContent = day;
+                    
+                    // Format date for comparison
+                    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    
+                    // Check if today
+                    if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                        dayElement.classList.add('current');
+                    }
+                    
+                    // Check if booked
+                    if (bookedDates.includes(dateString)) {
+                        dayElement.classList.add('booked');
+                    } else {
+                        dayElement.classList.add('available');
+                    }
+                    
+                    calendarDays.appendChild(dayElement);
+                }
             }
-          }
-        );
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
-        bookings = {};
-        data.forEach(b => {
-          bookings[b.date] = b.status;
+            
+            // Initial calendar generation
+            generateCalendar(currentYear, currentMonth);
+            
+            // Event listeners for previous and next month buttons
+            prevMonthBtn.addEventListener('click', function() {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentYear, currentMonth);
+            });
+            
+            nextMonthBtn.addEventListener('click', function() {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentYear, currentMonth);
+            });
+            
+            // Back button functionality
+            document.querySelector('.back-button').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Navigating back to units page...');
+                // In a real application, this would be: window.location.href = 'units.html';
+            });
+            
+            // Admin button functionality
+            document.querySelectorAll('.admin-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('Admin function activated. This would require authentication in a production environment.');
+                });
+            });
         });
-        renderCalendar();
-      } catch (e) {
-        console.error("Load failed:", e);
-        document.getElementById("calendar").innerHTML = "⚠️ Failed to load calendar. Please check internet.";
-      }
-    }
-
-    // Render calendar
-    function renderCalendar() {
-      const el = document.getElementById("calendar");
-      const adminEl = document.getElementById("adminCalendar");
-      el.innerHTML = "";
-      if (adminEl) adminEl.innerHTML = "";
-
-      const today = new Date();
-      for (let m = 0; m < 3; m++) {
-        const monthDate = new Date(today.getFullYear(), today.getMonth() + m, 1);
-        const month = monthDate.getMonth();
-        const year = monthDate.getFullYear();
-        const days = new Date(year, month + 1, 0).getDate();
-        const startDay = new Date(year, month, 1).getDay();
-
-        let table = `<table>
-          <tr><th colspan="7">${monthDate.toLocaleString('default', { month: 'long' })} ${year}</th></tr>
-          <tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr>
-          <tr>`;
-
-        for (let i = 0; i < startDay; i++) table += "<td></td>";
-
-        for (let d = 1; d <= days; d++) {
-          const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-          const status = bookings[dateStr] || "available";
-          const cls = status === "booked" ? "booked" : status === "maintenance" ? "maintenance" : "available";
-          const onclick = isLoggedIn ? `onclick="updateDate('${dateStr}')" style="cursor:pointer;"` : "";
-          table += `<td class="${cls}" ${onclick}>${d}</td>`;
-          if ((d + startDay) % 7 === 0) table += "</tr><tr>";
-        }
-        table += "</tr></table>";
-
-        el.innerHTML += table;
-        if (isLoggedIn && adminEl) adminEl.innerHTML += table;
-      }
-    }
-
-    // Admin Login
-    function login() {
-      if (document.getElementById("adminPass").value === ADMIN_PASSWORD) {
-        isLoggedIn = true;
-        document.getElementById("adminLogin").style.display = "none";
-        document.getElementById("adminPanel").style.display = "block";
-      } else {
-        alert("❌ Wrong password");
-      }
-    }
-
-    // Logout
-    function logout() {
-      isLoggedIn = false;
-      document.getElementById("adminPanel").style.display = "none";
-      document.getElementById("adminLogin").style.display = "block";
-      loadBookings();
-    }
-
-    // Update date status
-    async function updateDate(date) {
-      const options = { available: "booked", booked: "maintenance", maintenance: "available" };
-      const newStatus = options[bookings[date] || "available"];
-      bookings[date] = newStatus;
-
-      // First, delete existing record for this date/unit
-      await fetch(
-        `${API}?unit=eq.${UNIT}&date=eq.${date}`,
-        {
-          method: 'DELETE',
-          headers: { 'apikey': SUPABASE_ANON_KEY }
-        }
-      ).catch(console.error);
-
-      // Insert new record
-      await fetch(API, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({ unit: UNIT, date, status: newStatus })
-      }).catch(console.error);
-
-      // Refresh view
-      loadBookings();
-    }
-
-    // Load on start
-    loadBookings();
-  </script>
+    </script>
 </body>
 </html>
